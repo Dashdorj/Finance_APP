@@ -1,8 +1,23 @@
 // Дэлгэцтэй ажиллах контроллер
 var uiController = (function() {
-
-
-
+    var DOMstrings = {
+        inputType: ".add__type",
+        inputDescription: ".add__description",
+        inputValue: ".add__value",
+        addBtn: '.add__btn'
+    };
+    return {
+        getInput: function() {
+            return {
+                type: document.querySelector(DOMstrings.inputType).value,
+                description: document.querySelector(DOMstrings.inputDescription).value,
+                value: document.querySelector(DOMstrings.inputValue).value
+            };
+        },
+        getDOMstrings: function(){
+            return DOMstrings;
+        }
+    };
   })();
   
 //   Санхүүтэй ажиллах контроллер
@@ -12,10 +27,12 @@ var uiController = (function() {
   })();
   
   var appController = (function(uiController, financeController) {
+  
+
     var ctrlAddItem = function() {
         // 1. Оруулах өгөгдлийг дэлгэцээс олж авна
-        console.log('Дэлгэцээс өгөгдөл авах хэсэг.');
-        console.log('Enter дарсан байна.');
+     
+        console.log(uiController.getInput());
 
         // 2. Олж авсан өгөгдлүүдээ санхүүгийн контроллерт дамжуулж тэнд хадгалана.
 
@@ -28,16 +45,29 @@ var uiController = (function() {
 
         // 5. Эцсийн үлдэгдэл, тоdоцоог дэлгэцэнд гаргана.
         
-    }
-    document.querySelector('.add__btn').addEventListener('click',function(){
-        ctrlAddItem();
+    };
 
-    });
+    var setupEventListeners = function() {
 
-    document.addEventListener("keypress", function(event){
-       if(event.keyCode === 13 || event.which === 13) {
-           ctrlAddItem();                   
-       } else console.log('Өөр товч дарсан байна :' + event.keyCode);  
-    })
+        var DOM = uiController.getDOMstrings();
+
+        document.querySelector(DOM.addBtn).addEventListener('click', function(){
+            ctrlAddItem();
+        });
+    
+        document.addEventListener("keypress", function(event){
+           if(event.keyCode === 13 || event.which === 13) {
+               ctrlAddItem();                   
+           }  
+        });
+    };
+
+    return {
+        init: function(){
+
+            console.log("Application started ...");
+            setupEventListeners();
+        }
+    };
 
   })(uiController, financeController);
