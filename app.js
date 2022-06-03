@@ -6,7 +6,12 @@ var uiController = (function() {
         inputValue: ".add__value",
         addBtn: '.add__btn',
         incomeList: '.income__list',
-        expenseList: '.expenses__list'
+        expenseList: '.expenses__list',
+        tusuvLabel: ".budget__value",
+        incomeLabel: ".budget__income--value",
+        expesesLabel: ".budget__expenses--value",
+        percenttageLabel: ".budget__expenses--percentage"
+
     };
     return {
         getInput: function() {
@@ -26,16 +31,28 @@ var uiController = (function() {
 
           // Convert List to Array
           var fieldsArr = Array.prototype.slice.call(fields);
-            // fieldsArr.foreach(function(el, index, array){
-            //   el.value = "";
-            // });
-             for( var i = 0; i < fieldsArr.length; i++){
-               fieldsArr[i].value = "";
-               }
 
-            fieldsArr[0].focus();
+          // fieldsArr.forEach(function(el, index, array) {
+          //   el.value = "";
+          // });
 
-         
+          fieldsArr[0].focus();
+
+          for (var i = 0; i < fieldsArr.length; i++) {
+            fieldsArr[i].value = "";
+          }        
+        },
+
+        tusviigUzuuleh: function(tusuv){
+          document.querySelector(DOMstrings.tusuvLabel).textContent = tusuv.tusuv;
+          document.querySelector(DOMstrings.incomeLabel).textContent = tusuv.totalInc;
+          document.querySelector(DOMstrings.expesesLabel).textContent = tusuv.totalExp;
+
+          if(tusuv.huvi !== 0) {
+            document.querySelector(DOMstrings.percenttageLabel).textContent = tusuv.huvi + "%";
+          } else {
+            document.querySelector(DOMstrings.percenttageLabel).textContent = tusuv.huvi;
+           }
         },
 
         addListItem: function(item, type) {
@@ -106,7 +123,7 @@ var uiController = (function() {
           // Төсвийг шинээр тооцоолно
             data.tusuv = data.totals.inc - data.totals.exp;
             // Орлого зарлагын хувийг тооцоолно
-            data.huvi = Math.round(data.totals.exp / data.totals.inc) *100;
+            data.huvi = Math.round((data.totals.exp / data.totals.inc) *100);
 
         },
 
@@ -164,7 +181,7 @@ var uiController = (function() {
         var tusuv = financeController.tusviigAvah();
 
         // 6. тоdоцоог дэлгэцэнд гаргана.
-
+        uiController.tusviigUzuuleh(tusuv);
         
     };
     
@@ -185,9 +202,16 @@ var uiController = (function() {
       return {
         init: function() {
           console.log("Application started...");
+          uiController.tusviigUzuuleh({
+            tusuv: 0,
+            huvi: 0,           
+            totalInc: 0,
+            totalExp: 0
+
+          });
           setupEventListeners();
         }
       };
     })(uiController, financeController);
     
-    appController.init();;
+    appController.init();
